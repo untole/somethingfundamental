@@ -1,0 +1,88 @@
+//在读入命令时，tab（制表符）键可以补全某些东西。(没错被注释了)
+//这篇文比较杂（初学时这是肯定的吧2333
+
+基操
+mkdir files ：在本地创建 files 文件夹
+cd files ：进入该文件夹操作
+pwd 查看当前文件夹的路径（当然电脑中的
+git init ： 将所在文件夹变成git可操作的（其目录中多了.git文件（隐藏（用 ls -ah命令使其可见
+git add ：将文件加入提交清单中（也就是暂存区喽
+git reset xxx.xxx ： 将某个文件从提交清单中去除
+git commit ：将缓（暂）存区中的东西都提交到库中（等于完成一次修改，库的版本+1）
+git commit -m“” ：-m 参数 使得可以对每一次版本的修改做注释
+git log ：查看提交日志（--pretty=online 参数下面会讲
+rm xxx.xxx ：从本地删除一个文件（该操作需要git commit
+git reset ：
+git reset --hard HEAD^(^为前一个版本，^^为前两个版本，以此类推) 
+                        其中 --hard 为一个参数：？？？
+     当恢复到老版本后，历史中的最新的版本会消失（head指向当前老版本~
+	 此时可以用 git reflog 操作 查看你的所有历史操作
+     找到想去的版本号 直接 git reset --hard HEAD 版本号（前几位即可
+     所以多用分支很安全	 
+vi(m) xxx.xxx ：打开并编辑文件（对于.txt .c 文件都可行，然而.doc等会一堆乱码
+vim 进入vim编辑器
+cat xxx.xxx ：查看文件内容
+git checkout ： 可以是取消修改，也可以是到另一分支
+git checkout -- xxx.xxx ： 取消工作区对一个文件的所有修改
+git checkout -- * ： 撤销上次提交（现在版本）之后的所有修改（直接清空工作区与暂存区
+
+建立连接
+git remote remove origin :撤去本地库与远程库的关联
+git remote add origin git@github.com/server(your resigned name)/store.git：建立连接
+ssh-keygen -t rsa -C "你的qq@qq.com": 建立我的ssh秘钥
+git push -u origin master:新建连接后对远程库push
+git push origin master：之后推送修改时不需要 -u参数
+
+远程库
+首先登陆github 在上面建立一个仓库（选择public因为没钱
+然后
+git remote 查看远程分支（远程仓库默认为origin
+git remote -v 加上参数 查看远程分支 （且远程分支默认为master
+           可现实抓取和推送的origin的地址
+
+分支么？
+git checkout -b dev(branch's name) :建立一个新的分支-b表示创建并切换
+                              相当于 git branch dev            
+                                     git checkout dev
+git checkout dev(branch's name) :跳到另一个分支		
+git branch ：查看当前分支（前面有*的为目前分支
+cat xxx.xxx ：查看该文件内容
+vi xxx.xxx :修改该文件内容
+git branch -d dev ：删去一个指定分支
+git merge dev（某分支 ：合并某分支到当前分支
+                        所以在合并前要用 checkout 的操作 
+git log --gragh --pretty=online --abbrev-commit  :查看历史，有branch合并图示
+
+当本地文件被删除：
+1.远程库里面有时：
+   $ git reset HEAD xxx.xxx
+   然后文件就会表示为 已删：  D     xxx.xxx
+   $ git checkout xxx.xxx
+   便可~   
+2.可行时直接版本回溯
+
+对删除的一些实验与了解：
+1.在本地删除的文件是没有被commit过的，commit相当于版本库（每次commit版本就会改变
+  此时想要恢复该文件：直接使用 git checkout -- xxx.xxx 取消工作区内的所有修改 
+2. 当使用 git rm xxx.xxx 去删除一个文件的时候
+   相当于版本库内的直接变化，跳过工作暂存区（意思是被 add 过（此时保存修改需要commit操作
+  现在想要文件回来，便跟上文（远程库里面有时）操作一样
+3.git clean -df ： 删除所有untracked 的文件（建立之后未被add 所以不受git管束
+4.git reset --hard （把track 的文件revert（回溯）到上一个版本）（就是版本回溯好像
+5.
+  
+对于 git add git commit 操作的理解
+1.git add 相当于将文件放入下一次 commit 的清单当中（上文已改），
+  若无此操作，被修改的但你不想提交的文件不会被commit 到最新的版本库中
+ （另外，当某文件被add 过后又被修改
+   此时 git status 使会出现两个提示，该文件被add的修改与未被add的修改（当然不同（有图在桌面
+   此时 因为你可以看做是不同的两个东西，所以你可以使用 git commit 将其被add 的修改
+   但是不会将后一个未被add的修改放入新版本中
+2.git commit 相当于提交你的所有add 过的修改并作为一个最新的版本（历史哦
+
+对于 vi操作与mkdir操作的对比
+1. vi可以编辑目录中已存在的文件
+   vi还可以直接创建  （名字+后缀名格式）
+2. mkdir是在目录下面创建
+
+  
